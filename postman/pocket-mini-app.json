@@ -1,0 +1,275 @@
+{
+	"info": {
+		"_postman_id": "acae81d3-040c-487b-acb1-6e82506bc267",
+		"name": "Pocket Mini-App",
+		"description": "Миний-Апп сервер талын хүсэлтүүд",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Токен авах үйлдэл",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "{{client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{client_secret}}",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://sso-staging.invescore.mn/auth/realms/invescore/protocol/openid-connect/token",
+					"protocol": "https",
+					"host": [
+						"sso-staging",
+						"invescore",
+						"mn"
+					],
+					"path": [
+						"auth",
+						"realms",
+						"invescore",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				},
+				"description": "ClientCredentials grant-р токен авах үйлдэл"
+			},
+			"response": []
+		},
+		{
+			"name": "2. Токен шинэчлэх үйлдэл",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "{{client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "refresh_token",
+							"value": "{{value_of_refresh_token}}",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "refresh_token",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{client_secret}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://sso-staging.invescore.mn/auth/realms/invescore/protocol/openid-connect/token",
+					"protocol": "https",
+					"host": [
+						"sso-staging",
+						"invescore",
+						"mn"
+					],
+					"path": [
+						"auth",
+						"realms",
+						"invescore",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				},
+				"description": "Refresh token"
+			},
+			"response": []
+		},
+		{
+			"name": "3. Токен instrospection",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "{{client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{client_secret}}",
+							"type": "text"
+						},
+						{
+							"key": "token",
+							"value": "{{value_of_access_token}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://sso-staging.invescore.mn/auth/realms/invescore/protocol/openid-connect/token/introspect",
+					"protocol": "https",
+					"host": [
+						"sso-staging",
+						"invescore",
+						"mn"
+					],
+					"path": [
+						"auth",
+						"realms",
+						"invescore",
+						"protocol",
+						"openid-connect",
+						"token",
+						"introspect"
+					]
+				},
+				"description": "Introspect token"
+			},
+			"response": []
+		},
+		{
+			"name": "4. Нэхэмжлэх үүсгэх",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer ... ",
+						"description": "client_id : client_secret-ийн утгыг ашиглан авсан access_token"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\": 560,\n    \"info\": \"Нэхэмжлэх\",\n    \"consumerToken\": \"eyJhbGciOiJSUzI1NiIsI....jrlKHPQnm2b43N7LgBhQjAuHzdaQOA\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://service-staging.invescore.mn/merchant/consumer/invoice",
+					"protocol": "https",
+					"host": [
+						"service-staging",
+						"invescore",
+						"mn"
+					],
+					"path": [
+						"merchant",
+						"consumer",
+						"invoice"
+					]
+				},
+				"description": "Нэхэмжлэх лавлах үйлдэл\n\nconsumerToken гэдэг нь хэрэглэгч өөрийн хувийн мэдээллийн зөвшөөрөл олгосны үр дүнд Pocket-аппликейшн-с\nmini-app web клиент-д олгосон токенийг хэлнэ.\n\nНэхэмжлэхийн үнийн дүн нь хамгийн багадаа 500 төгрөг байх ба гүйлгээний тэмдэглэлийн урт нь ихдээ 100 тэмдэгт байна."
+			},
+			"response": []
+		},
+		{
+			"name": "5. Нэхэмжлэх лавлах үйлдэл",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer ..."
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://service-staging.invescore.mn/merchant/invoice/check/42",
+					"protocol": "https",
+					"host": [
+						"service-staging",
+						"invescore",
+						"mn"
+					],
+					"path": [
+						"merchant",
+						"invoice",
+						"check",
+						"42"
+					]
+				},
+				"description": "Нэхэмжлэх лавлах үйлдэл"
+			},
+			"response": []
+		},
+		{
+			"name": "7. Тохиргооны мэдээлэл авах",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer ..."
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://service-staging.invescore.mn/merchant/pg/config",
+					"protocol": "https",
+					"host": [
+						"service-staging",
+						"invescore",
+						"mn"
+					],
+					"path": [
+						"merchant",
+						"pg",
+						"config"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
